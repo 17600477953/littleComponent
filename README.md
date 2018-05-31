@@ -1,4 +1,21 @@
-# littleComponent
-自己写的一些简单实用的小组件
-基于vue2.x
-现在包含瀑布流 betterscroll 的下拉刷新 上滑加载更多 点击菜单栏 右侧滚动效果
+# scroll
+
+> A Vue.js project
+
+## Build Setup
+
+``` bash
+# install dependencies
+npm install
+
+# serve with hot reload at localhost:8080
+npm run dev
+
+# build for production with minification
+npm run build
+
+# build for production and view the bundle analyzer report
+npm run build --report
+```
+
+For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).

@@ -1,0 +1,41 @@
+// 定义变量
+$redcolor:#F56C6C;
+// 导入
+// @import "foo.css"; 
+// @import "foo" screen; 
+// @import "http://foo.com/bar";
+// @import url(foo);
+// 混合模式调用
+@mixin error($borderWidth:1px){
+  border: $borderWidth solid #f00;
+  color: #f00;
+}
+.generic-error {
+  @include error();/*直接调用error Mixins*/ 
+}
+.login-error {
+  @include error(3px);/*调用error Mixins，并将$borderWidth参数重定义为3px*/ 
+}
+// 标签嵌套
+div{
+  p {
+    color: $redcolor
+  }
+}
+// 属性嵌套
+div{
+  font: {
+    family: 'pingfang';
+    size: 1.6rem;
+    weight: normal;
+  }
+}
+// 继承
+%block {
+  margin: 10px 5px;
+  padding: 2px; 
+}
+p { 
+  @extend %block;
+  border: 1px solid #eee;
+}
