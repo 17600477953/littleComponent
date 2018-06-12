@@ -21,6 +21,10 @@ export default new Router({
     {
       path: '/linkage',
       component: () => import('@/views/linkage/index')
+    },
+    {
+      path: '/sass',
+      component: () => import('@/views/sass')
     }
   ]
 })

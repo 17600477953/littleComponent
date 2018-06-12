@@ -1,36 +1,35 @@
 <!--  -->
 <template>
   <div ref="container" id="container">
-    <!-- <button @click="alert">+++</button>
-    <button @click="alert">+++</button> -->
-    <p><span>用户名</span><input type="text" v-model="userName"></p>
-    <p><span>密码</span><input type="text" v-model="psw"></p>
-    <p><button @click="logoIn">登陆</button><button @click="reg">注册</button></p>
-    <div id="alertWrap">
-      <div id="alertInner">
-        <p class="tit">错误信息</p>
-        <div class="confirm">
-          <div class="confirmBtn" @click="conFn('confirm')">确定</div>
-          <div class="cancelBtn" @click="conFn('cancel')">取消</div>
-        </div>
-      </div>
-    </div>
-    <div class="ball">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+    <!-- <button @click="alertMsg">消息提示</button> -->
+    <div class="upload">
+      <button @click="fn">添加</button>
+      <ul class="clearfix">
+        <li v-if="imgs.length>0" v-for='(item ,index ) in imgs' :key="index">
+          <img :src="item">
+        </li>
+        <!-- <li style="position:relative" v-if="imgs.length>=6 ? false : true">
+          <input class="upload" @change='add_img'  type="file">
+        </li> -->
+    </ul>
+    <p style="position:relative" v-if="imgs.length>=6 ? false : true">
+      <input ref="inputbtn" class="upload" @change='add_img'  type="file">
+    </p>
     </div>
   </div>
 </template>
 
 <script>
-// import { open } from '@/utils/tip.js'
+import { open } from '@/utils/tip.js'
 export default {
   data () {
     return {
       userName: '',
-      psw: ''
+      psw: '',
+      imgs: [],
+      imgData: {
+        accept: 'image/gif, image/jpeg, image/png, image/jpg'
+      }
     }
   },
   created () {
@@ -39,6 +38,9 @@ export default {
     })
   },
   methods: {
+    alertMsg () {
+      open({tit: '标题', content: '错误提示'})
+    },
     initDialog (params) {
       if (params.type === 'confirm') {
         let div = document.createElement('div')
@@ -48,36 +50,48 @@ export default {
 
       }
     },
-    logoIn () {
-      const params = {
-        username: this.userName,
-        psw: this.psw
-      }
-      this.$http({
-        method: 'get',
-        url: '/login',
-        params: params
-      }).then((data) => {
-        console.log(data)
-      }).catch((err) => {
-        console.log(err)
-      })
+    fn () {
+      this.$refs.inputbtn.click() // 代替原生的上传按钮
     },
-    reg () {
-      const params = {
-        username: this.userName,
-        psw: this.psw
+    add_img (event) {
+      let reader = new FileReader()
+      let img1 = event.target.files[0]
+      let type = img1.type// 文件的类型，判断是否是图片
+      let size = img1.size// 文件的大小，判断图片的大小
+      if (this.imgData.accept.indexOf(type) === -1) {
+        alert('请选择我们支持的图片格式！')
+        return false
       }
-      this.$http({
-        method: 'post',
-        url: '/registerPort',
-        data: params
-      }).then((data) => {
-        console.log(data)
-      }).catch((err) => {
-        console.log(err)
+      if (size > 3145728) {
+        alert('请选择3M以内的图片！')
+        return false
+      }
+      reader.readAsDataURL(img1)
+      var that = this
+      reader.onload = function (e) {
+        var url = this.result
+        that.imgs.push(url)
+        console.log(url)
+        // img.src = url
+      }
+      let form = new FormData()
+      form.append('file', img1, img1.name)
+      this.$http.post('/file/upload', form, {
+        headers: {'Content-Type': 'multipart/form-data'}
+      }).then((response) => {
+        console.log(response.data)
+        // uri = response.data.url
+        // reader.readAsDataURL(img1)
+        // var that = this
+        // reader.onloadend = function () {
+        //   that.imgs.push(uri)
+        // }
+      }).catch((error) => {
+        alert('上传图片出错！')
+        console.log(error)
       })
     }
+
   }
 }
 </script>
@@ -140,6 +154,18 @@ $redcolor:#F56C6C;
   .cancelBtn{
     background: $yelwcolor;
     color: #fff;
+  }
+}
+.clearfix{
+  overflow: hidden;
+  li{
+    width: 10rem;
+    height: 10rem;
+    float: left;
+    img{
+      width: 100%;
+      height: 100%;
+    }
   }
 }
 </style>
