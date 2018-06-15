@@ -12,7 +12,7 @@ export default new Router({
     },
     {
       path: '/',
-      component: () => import('@/views/news')
+      component: () => import('@/views/upload')
     },
     {
       path: '/spring',
@@ -25,6 +25,10 @@ export default new Router({
     {
       path: '/sass',
       component: () => import('@/views/sass')
+    },
+    {
+      path: '/echarts',
+      component: () => import('@/views/echarts')
     }
   ]
 })

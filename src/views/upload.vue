@@ -1,20 +1,18 @@
 <!--  -->
 <template>
   <div ref="container" id="container">
-    <!-- <button @click="alertMsg">消息提示</button> -->
     <div class="upload">
-      <button @click="fn">添加</button>
+      <button @click="addFn">添加</button>
       <ul class="clearfix">
         <li v-if="imgs.length>0" v-for='(item ,index ) in imgs' :key="index">
           <img :src="item">
         </li>
-        <!-- <li style="position:relative" v-if="imgs.length>=6 ? false : true">
-          <input class="upload" @change='add_img'  type="file">
-        </li> -->
     </ul>
-    <p style="position:relative" v-if="imgs.length>=6 ? false : true">
+    <!-- <p v-if="imgs.length>=6 ? false : true"> -->
+    <p v-show="false">
       <input ref="inputbtn" class="upload" @change='add_img'  type="file">
     </p>
+    <p><button @click="saveFn">确认上传</button><button @click="cancelFn">取消</button></p>
     </div>
   </div>
 </template>
@@ -27,6 +25,7 @@ export default {
       userName: '',
       psw: '',
       imgs: [],
+      form: null,
       imgData: {
         accept: 'image/gif, image/jpeg, image/png, image/jpg'
       }
@@ -50,8 +49,24 @@ export default {
 
       }
     },
-    fn () {
+    addFn () {
       this.$refs.inputbtn.click() // 代替原生的上传按钮
+    },
+    cancelFn () {
+      this.$refs.inputbtn.value = ''
+      this.imgs = []
+      this.form = null
+    },
+    saveFn () {
+      console.log(this.form)
+      this.$http.post('/file/upload', this.form, {
+        headers: {'Content-Type': 'multipart/form-data'}
+      }).then((response) => {
+        console.log(response.data)
+      }).catch((error) => {
+        alert('上传图片出错！')
+        console.log(error)
+      })
     },
     add_img (event) {
       let reader = new FileReader()
@@ -74,22 +89,23 @@ export default {
         console.log(url)
         // img.src = url
       }
-      let form = new FormData()
-      form.append('file', img1, img1.name)
-      this.$http.post('/file/upload', form, {
-        headers: {'Content-Type': 'multipart/form-data'}
-      }).then((response) => {
-        console.log(response.data)
-        // uri = response.data.url
-        // reader.readAsDataURL(img1)
-        // var that = this
-        // reader.onloadend = function () {
-        //   that.imgs.push(uri)
-        // }
-      }).catch((error) => {
-        alert('上传图片出错！')
-        console.log(error)
-      })
+      this.form = new FormData()
+      this.form.append('file', img1, img1.name)
+      console.log(this.form)
+      // this.$http.post('/file/upload', this.form, {
+      //   headers: {'Content-Type': 'multipart/form-data'}
+      // }).then((response) => {
+      //   console.log(response.data)
+      //   // uri = response.data.url
+      //   // reader.readAsDataURL(img1)
+      //   // var that = this
+      //   // reader.onloadend = function () {
+      //   //   that.imgs.push(uri)
+      //   // }
+      // }).catch((error) => {
+      //   alert('上传图片出错！')
+      //   console.log(error)
+      // })
     }
 
   }
