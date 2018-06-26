@@ -4,6 +4,16 @@
   </div>
   <div :class="className" :id="sid" :style="{height:height,width:width}" ref="roundChart">
   </div>
+  <div>
+    <button @click="showDate">显示日历</button>
+      <calendar
+      v-model="calendarShow"
+      :defaultDate="defaultDate"
+      :minDate="defaultDate"
+      :format="format"
+      @change="handelChange">
+      </calendar>
+  </div>
 </div>
 </template>
 <script>
@@ -31,8 +41,13 @@ export default {
     return {
       chart: null,
       roundChart: null,
-      sid: 'sads'
+      sid: 'sads',
+      calendarShow: false,
+      format: 'yyyy-MM-dd',
+      defaultDate: new Date()
     }
+  },
+  created () {
   },
   mounted () {
     this.initChart()
@@ -46,6 +61,12 @@ export default {
     this.chart = null
   },
   methods: {
+    handelChange (params) {
+      console.log(params)
+    },
+    showDate () {
+      this.calendarShow = true
+    },
     initRoundEcharts () {
       this.roundChart = echarts.init(this.$refs.roundChart)
       // 把配置和数据放这里

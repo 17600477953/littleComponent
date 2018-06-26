@@ -5,6 +5,9 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 import '@/styles/main.scss'
+import Calendar from 'vue-mobile-calendar'
+
+Vue.use(Calendar)
 
 Vue.config.productionTip = false
 if (process.env.NODE_ENV === 'production') {

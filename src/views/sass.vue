@@ -8,6 +8,9 @@
     <div class="menuBar">
       <p>加粗了吗</p>
     </div>
+    <div>
+      <input type="text">
+    </div>
   </div>
 </template>
 
@@ -46,6 +49,7 @@ $redcolor:#F56C6C;
   background: $greencolor;
 }
 .menuBar{
+  height: 30rem;
   p{
     font: {
       size:20px;
